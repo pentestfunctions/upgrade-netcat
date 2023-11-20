@@ -15,16 +15,14 @@ The script dynamically identifies the available Python and shell binaries on the
 ### The Script Explained
 
 - `python_bin=$(ls /bin | grep -m 1 -E '^python[0-9.]*$')`: This part of the script lists all files in `/bin`, filters for Python executables, and assigns the first match to `python_bin`. It ensures that any version of Python available on the target system is used.
-
 - `shell_bin=$(ls /bin | grep -E '^(sh|bash)$' | head -n 1)`: This command searches for either `sh` or `bash` in `/bin` and sets `shell_bin` to the first one found. `sh` is a more universally available shell, hence prioritized.
-
 - `$python_bin -c "import pty; pty.spawn('/bin/$shell_bin')"`: Here, the identified Python binary is used to spawn a new shell instance (`bash` or `sh`), using Python's `pty` module for pseudo-terminal handling, resulting in an interactive TTY shell.
 
 ## Usage 📖
 
 1. **Execute the Script**: Run the command in your Netcat shell to upgrade it.
    ```bash
-   python_bin=... # Full command as provided above
+   python_bin=$(ls /bin | grep -m 1 -E '^python[0-9.]*$'); shell_bin=$(ls /bin | grep -E '^(sh|bash)$' | head -n 1); [ -n "$python_bin" -a -n "$shell_bin" ] && $python_bin -c "import pty; pty.spawn('/bin/$shell_bin')"
    ```
 
 2. **Background the Shell**: Press `CTRL + Z` to put the Netcat shell in the background.
